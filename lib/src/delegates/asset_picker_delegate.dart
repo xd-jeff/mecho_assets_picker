@@ -123,6 +123,7 @@ class AssetPickerDelegate {
         locale: Localizations.maybeLocaleOf(context),
         shouldAutoplayPreview: pickerConfig.shouldAutoplayPreview,
         dragToSelect: pickerConfig.dragToSelect,
+        sendTo: pickerConfig.sendTo,
         detailTip: pickerConfig.detailTip,
         confirmButtonTitle: pickerConfig.confirmButtonTitle,
         permissionLimitTip: pickerConfig.permissionLimitTip,

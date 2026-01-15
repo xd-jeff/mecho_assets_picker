@@ -40,6 +40,7 @@ class AssetPickerConfig {
     this.assetsChangeRefreshPredicate,
     this.shouldAutoplayPreview = false,
     this.dragToSelect,
+    this.sendTo,
     this.detailTip,
     this.confirmButtonTitle,
     this.permissionLimitTip,
@@ -222,6 +223,8 @@ class AssetPickerConfig {
   /// 当 `maxAssets` 为 `1` 时，该功能不可用。
   /// {@endtemplate}
   final bool? dragToSelect;
+
+  final String? sendTo;
 
   // 预览页面发送问问本
   final String? detailTip;

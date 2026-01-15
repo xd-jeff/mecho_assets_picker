@@ -118,6 +118,12 @@ class AssetPickerAppBar extends StatelessWidget implements PreferredSizeWidget {
       width: double.maxFinite,
       height: _barHeight + padding.top,
       padding: EdgeInsets.only(top: padding.top),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(24),
+          topRight: Radius.circular(24),
+        ),
+      ),
       child: Stack(
         children: <Widget>[
           if (canPop(context))

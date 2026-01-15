@@ -393,6 +393,7 @@ class DefaultAssetPickerViewerBuilderDelegate
     super.shouldReversePreview,
     super.selectPredicate,
     this.shouldAutoplayPreview = false,
+    this.sendTo,
     this.detailTip,
     this.confirmButtonTitle,
   });
@@ -411,6 +412,8 @@ class DefaultAssetPickerViewerBuilderDelegate
   /// If the type is not null, the title of the viewer will not display.
   /// 如果类型不为空，则标题将不会显示。
   final SpecialPickerType? specialPickerType;
+
+  final String? sendTo;
 
   final String? detailTip;
 
@@ -581,7 +584,7 @@ class DefaultAssetPickerViewerBuilderDelegate
       child: CNP<AssetPickerViewerProvider<AssetEntity>?>.value(
         value: provider,
         child: Container(
-          color: const Color(0xff20212C),
+          color: Colors.white,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.end,
@@ -594,7 +597,7 @@ class DefaultAssetPickerViewerBuilderDelegate
                       width: count > 0 ? double.maxFinite : 0,
                       height: bottomPreviewHeight,
                       // color: backgroundColor,
-                      color: Colors.black,
+                      color: Colors.white,
                       child: ListView.builder(
                         controller: previewingListController,
                         scrollDirection: Axis.horizontal,
@@ -624,6 +627,11 @@ class DefaultAssetPickerViewerBuilderDelegate
                       detailTip ?? '',
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w700,
+                      ),
                     )),
                     if (provider != null || isWeChatMoment)
                       confirmButton(context),
@@ -751,7 +759,7 @@ class DefaultAssetPickerViewerBuilderDelegate
   /// 顶栏部件
   Widget appBar(BuildContext context) {
     final bar = AssetPickerAppBar(
-      backgroundColor: Color(0xff171821),
+      backgroundColor: Colors.white,
       leading: Semantics(
         sortKey: ordinalSortKey(0),
         child: GestureDetector(
@@ -780,9 +788,9 @@ class DefaultAssetPickerViewerBuilderDelegate
                 builder: (_, AsyncSnapshot<int> snapshot) => ScaleText(
                   '${snapshot.requireData + 1}/${previewAssets.length}',
                   style: const TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w500,
-                  ),
+                      fontSize: 17,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black),
                 ),
               ),
             )
@@ -867,25 +875,31 @@ class DefaultAssetPickerViewerBuilderDelegate
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                gradient: isButtonEnabled
-                    ? const LinearGradient(
-                        colors: [
-                          Color(0xff3ECEB2),
-                          Color(0xff0FB5A8),
-                        ],
-                      )
-                    : LinearGradient(
-                        colors: [
-                          themeData.splashColor,
-                          themeData.splashColor,
-                        ],
-                      ),
+                border: Border.all(
+                    color: Color(0xff687571)
+                        .withValues(alpha: isButtonEnabled ? 1 : 0.5)),
+                color: Color(0xffE5F7F1)
+                    .withValues(alpha: isButtonEnabled ? 1 : 0.5),
+                // gradient: isButtonEnabled
+                //     ? const LinearGradient(
+                //         colors: [
+                //           Color(0xff3ECEB2),
+                //           Color(0xff0FB5A8),
+                //         ],
+                //       )
+                //     : LinearGradient(
+                //         colors: [
+                //           themeData.splashColor,
+                //           themeData.splashColor,
+                //         ],
+                //       ),
                 borderRadius: BorderRadius.circular(20),
               ),
               constraints: const BoxConstraints(minWidth: 100, minHeight: 40),
               child: Text(
                 confirmButtonTitle ?? buildText(),
-                style: const TextStyle(fontSize: 17),
+                // style: const TextStyle(fontSize: 17),
+                style: const TextStyle(fontSize: 14, color: Colors.black),
               ),
             ),
           );
@@ -1013,7 +1027,7 @@ class DefaultAssetPickerViewerBuilderDelegate
     return Semantics(
       sortKey: ordinalSortKey(1),
       child: Container(
-        color: Colors.black,
+        color: Colors.white,
         child: ExtendedImageGesturePageView.builder(
           physics: previewAssets.length == 1
               ? const CustomClampingScrollPhysics()

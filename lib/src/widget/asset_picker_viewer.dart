@@ -48,6 +48,7 @@ class AssetPickerViewer<Asset, Path> extends StatefulWidget {
     bool useRootNavigator = false,
     RouteSettings? pageRouteSettings,
     AssetPickerViewerPageRouteBuilder<List<AssetEntity>>? pageRouteBuilder,
+    String? sendTo,
     String? detailTip,
     String? confirmButtonTitle,
   }) async {
@@ -76,6 +77,7 @@ class AssetPickerViewer<Asset, Path> extends StatefulWidget {
         shouldReversePreview: shouldReversePreview,
         selectPredicate: selectPredicate,
         shouldAutoplayPreview: shouldAutoplayPreview,
+        sendTo: sendTo,
         detailTip: detailTip,
         confirmButtonTitle: confirmButtonTitle,
       ),
