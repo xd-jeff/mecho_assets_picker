@@ -45,6 +45,7 @@ class AssetPickerConfig {
     this.confirmButtonTitle,
     this.permissionLimitTip,
     this.authButtonTitle,
+    this.topPadding = 0,
   })  : assert(
           pickerTheme == null || themeColor == null,
           'pickerTheme and themeColor cannot be set at the same time.',
@@ -237,4 +238,6 @@ class AssetPickerConfig {
 
   // 去授权
   final String? authButtonTitle;
+
+  final double topPadding;
 }

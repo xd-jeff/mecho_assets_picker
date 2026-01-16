@@ -145,14 +145,17 @@ class AssetPickerDelegate {
       isScrollControlled: true,
       context: context,
       backgroundColor: Colors.transparent,
+      showDragHandle: false,
       builder: (_) => Column(
         children: [
           GestureDetector(
             onTap: Navigator.maybeOf(context)?.maybePop,
             child: Container(
-                color: Colors.transparent,
-                width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.3),
+              color: Colors.transparent,
+              width: double.infinity,
+              // height: MediaQuery.of(context).size.height * 0.3),
+              height: pickerConfig.topPadding,
+            ),
           ),
           Expanded(child: picker)
         ],
