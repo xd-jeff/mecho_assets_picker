@@ -1381,7 +1381,7 @@ class PersianAssetPickerTextDelegate extends AssetPickerTextDelegate {
   }
 }
 
-class ThaiAssetPickerTextDelegate {
+class ThaiAssetPickerTextDelegate extends AssetPickerTextDelegate {
   const ThaiAssetPickerTextDelegate();
 
   String get languageCode => 'th';
