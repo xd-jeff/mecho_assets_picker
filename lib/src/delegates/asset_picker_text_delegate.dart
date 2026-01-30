@@ -23,6 +23,9 @@ const assetPickerTextDelegates = <AssetPickerTextDelegate>[
   TraditionalChineseAssetPickerTextDelegate(),
   TurkishAssetPickerTextDelegate(),
   VietnameseAssetPickerTextDelegate(),
+  ThaiAssetPickerTextDelegate(),
+  PortugueseAssetPickerTextDelegate(),
+  SpanishAssetPickerTextDelegate(),
 ];
 
 /// Obtain the text delegate from the given locale.
@@ -38,25 +41,27 @@ AssetPickerTextDelegate assetPickerTextDelegateFromLocale(
   final String? scriptCode = locale.scriptCode;
   final String? countryCode = locale.countryCode;
 
-  final matchedByLanguage = assetPickerTextDelegates.where(
-    (e) => e.languageCode == languageCode,
-  );
+  final matchedByLanguage = assetPickerTextDelegates
+      .where(
+        (e) => e.languageCode == languageCode,
+      )
+      .toList();
   if (matchedByLanguage.isEmpty) {
     return fallback;
   }
 
-  final matchedByScript = scriptCode != null
-      ? matchedByLanguage.where((e) => e.scriptCode == scriptCode)
-      : null;
-  if (matchedByScript == null || matchedByScript.isEmpty) {
-    return matchedByLanguage.first;
-  }
+  // final matchedByScript = scriptCode != null
+  //     ? matchedByLanguage.where((e) => e.scriptCode == scriptCode)
+  //     : null;
+  // if (matchedByScript == null || matchedByScript.isEmpty) {
+  //   return matchedByLanguage.first;
+  // }
 
   final matchedByCountry = countryCode != null
-      ? matchedByScript.where((e) => e.countryCode == countryCode)
+      ? matchedByLanguage.where((e) => e.countryCode == countryCode)
       : null;
 
-  return matchedByCountry?.firstOrNull ?? matchedByScript.first;
+  return matchedByCountry?.firstOrNull ?? matchedByLanguage.first;
 }
 
 /// Text delegate that controls text in widgets.
@@ -68,7 +73,7 @@ class AssetPickerTextDelegate {
 
   String? get scriptCode => 'Hans';
 
-  String? get countryCode => null;
+  String? get countryCode => 'CN';
 
   @nonVirtual
   Locale get locale => Locale.fromSubtags(
@@ -1178,6 +1183,9 @@ class TraditionalChineseAssetPickerTextDelegate
   String get scriptCode => 'Hant';
 
   @override
+  String get countryCode => 'TW';
+
+  @override
   String get confirm => '確認';
 
   @override
@@ -1371,4 +1379,417 @@ class PersianAssetPickerTextDelegate extends AssetPickerTextDelegate {
     }
     return this;
   }
+}
+
+class ThaiAssetPickerTextDelegate {
+  const ThaiAssetPickerTextDelegate();
+
+  String get languageCode => 'th';
+
+  @nonVirtual
+  Locale get locale => Locale.fromSubtags(
+        languageCode: languageCode,
+        scriptCode: scriptCode,
+        countryCode: countryCode,
+      );
+
+  /// Confirm string for the confirm button.
+  /// 确认按钮的字段
+  String get confirm => 'ยืนยัน';
+
+  /// Cancel string for back button.
+  /// 返回按钮的字段
+  String get cancel => 'ยกเลิก';
+
+  /// Edit string for edit button.
+  /// 编辑按钮的字段
+  String get edit => 'แก้ไข';
+
+  /// GIF indicator string.
+  /// GIF指示的字段
+  String get gifIndicator => 'GIF';
+
+  /// Live-Photo image indicator string.
+  /// 实况图片指示的字段
+  String get livePhotoIndicator => 'เรียลลิตี้';
+
+  /// Load failed string for item.
+  /// 资源加载失败时的字段
+  String get loadFailed => 'โหลดล้มเหลว';
+
+  /// Original string for original selection.
+  /// 选择是否原图的字段
+  String get original => 'แผนภาพต้นฉบับ';
+
+  /// Preview string for preview button.
+  /// 预览按钮的字段
+  String get preview => 'แสดงตัวอย่าง';
+
+  /// Select string for select button.
+  /// 选择按钮的字段
+  String get select => 'เลือก';
+
+  /// Empty list string for empty asset list.
+  /// 资源列表为空时的占位字段
+  String get emptyList => 'รายการว่างเปล่า';
+
+  /// Un-supported asset type string for assets that
+  /// belongs to [AssetType.other].
+  /// 未支持的资源类型的字段
+  String get unSupportedAssetType =>
+      'ประเภทของทรัพยากรที่ยังไม่ได้รับการสนับสนุน';
+
+  /// "Unable to access all assets in album".
+  String get unableToAccessAll => 'ไม่สามารถเข้าถึงทรัพยากรได้ทั้งหมด';
+
+  String get viewingLimitedAssetsTip =>
+      'แอปสามารถเข้าถึงทรัพยากรและอัลบั้มบางส่วนเท่านั้น';
+
+  String get changeAccessibleLimitedAssets =>
+      'แตะเพื่อตั้งค่าทรัพยากรที่สามารถเข้าถึงได้';
+
+  String get accessAllTip =>
+      'คุณได้ตั้งค่าแอปที่สามารถเข้าถึงทรัพยากรบางส่วนของอุปกรณ์เท่านั้น'
+      'แนะนำการเข้าถึง "แหล่งข้อมูลทั้งหมด"';
+
+  String get goToSystemSettings => 'ไปที่การตั้งค่าระบบ';
+
+  /// "Continue accessing some assets".
+  String get accessLimitedAssets => 'การเข้าถึงทรัพยากรบางส่วนอย่างต่อเนื่อง';
+
+  String get accessiblePathName => 'ทรัพยากรที่เข้าถึงได้';
+
+  /// This is used in video asset item in the picker, in order
+  /// to display the duration of the video or audio type of asset.
+  /// 该字段用在选择器视频或音频部件上，用于显示视频或音频资源的时长。
+  String durationIndicatorBuilder(Duration duration) {
+    const String separator = ':';
+    final String minute = duration.inMinutes.toString().padLeft(2, '0');
+    final String second = (duration - Duration(minutes: duration.inMinutes))
+        .inSeconds
+        .toString()
+        .padLeft(2, '0');
+    return '$minute$separator$second';
+  }
+
+  /// Semantics fields.
+  ///
+  /// Fields below are only for semantics usage. For customizable these fields,
+  /// head over to [EnglishAssetPickerTextDelegate] for fields understanding.
+  String get sTypeAudioLabel => 'เสียง';
+
+  String get sTypeImageLabel => 'รูปภาพ';
+
+  String get sTypeVideoLabel => 'วิดีโอ';
+
+  String get sTypeOtherLabel => 'ทรัพยากรอื่น ๆ';
+
+  String semanticTypeLabel(AssetType type) {
+    return switch (type) {
+      AssetType.audio => sTypeAudioLabel,
+      AssetType.image => sTypeImageLabel,
+      AssetType.video => sTypeVideoLabel,
+      AssetType.other => sTypeOtherLabel,
+    };
+  }
+
+  String get sActionPlayHint => 'เล่น';
+
+  String get sActionPreviewHint => 'แสดงตัวอย่าง';
+
+  String get sActionSelectHint => 'ตรวจสอบแล้ว';
+
+  String get sActionSwitchPathLabel => 'สลับเส้นทาง';
+
+  String get sActionUseCameraHint => 'การใช้กล้อง';
+
+  String get sNameDurationLabel => 'ระยะเวลา';
+
+  String get sUnitAssetCountLabel => 'จำนวน';
+
+  /// Fallback delegate for semantics determined by platform.
+  ///
+  /// The purpose of this field is to provide a fallback delegate references
+  /// when a language does not supported by Talkback or VoiceOver. Set this to
+  /// another text delegate makes screen readers read accordingly.
+  ///
+  /// See also:
+  ///  * Talkback: https://support.google.com/accessibility/android/answer/11101402)
+  ///  * VoiceOver: https://support.apple.com/en-us/HT206175
+  AssetPickerTextDelegate get semanticsTextDelegate => this;
+}
+
+class PortugueseAssetPickerTextDelegate extends AssetPickerTextDelegate {
+  const PortugueseAssetPickerTextDelegate();
+
+  String get languageCode => 'pt';
+
+  @nonVirtual
+  Locale get locale => Locale.fromSubtags(
+        languageCode: languageCode,
+        scriptCode: scriptCode,
+        countryCode: countryCode,
+      );
+
+  /// Confirm string for the confirm button.
+  /// 确认按钮的字段
+  String get confirm => 'confirmar';
+
+  /// Cancel string for back button.
+  /// 返回按钮的字段
+  String get cancel => 'cancelar';
+
+  /// Edit string for edit button.
+  /// 编辑按钮的字段
+  String get edit => 'editar';
+
+  /// GIF indicator string.
+  /// GIF指示的字段
+  String get gifIndicator => 'GIF';
+
+  /// Live-Photo image indicator string.
+  /// 实况图片指示的字段
+  String get livePhotoIndicator => 'Realidade';
+
+  /// Load failed string for item.
+  /// 资源加载失败时的字段
+  String get loadFailed => 'Falha ao carregar';
+
+  /// Original string for original selection.
+  /// 选择是否原图的字段
+  String get original => 'Diagrama original';
+
+  /// Preview string for preview button.
+  /// 预览按钮的字段
+  String get preview => 'Visualização';
+
+  /// Select string for select button.
+  /// 选择按钮的字段
+  String get select => 'escolha';
+
+  /// Empty list string for empty asset list.
+  /// 资源列表为空时的占位字段
+  String get emptyList => 'A lista está vazia';
+
+  /// Un-supported asset type string for assets that
+  /// belongs to [AssetType.other].
+  /// 未支持的资源类型的字段
+  String get unSupportedAssetType => 'Tipos de recursos ainda não suportados';
+
+  /// "Unable to access all assets in album".
+  String get unableToAccessAll => 'Não é possível acessar todos os recursos';
+
+  String get viewingLimitedAssetsTip =>
+      'Os aplicativos só podem acessar alguns recursos e álbuns';
+
+  String get changeAccessibleLimitedAssets =>
+      'Clique em Configurar recursos acessíveis';
+
+  String get accessAllTip =>
+      'Você configurou o aplicativo para acessar apenas alguns recursos do dispositivo,'
+      'Recomenda permitir o acesso a "Todos os recursos"';
+
+  String get goToSystemSettings => 'Ir para as Configurações do Sistema';
+
+  /// "Continue accessing some assets".
+  String get accessLimitedAssets => 'Continuar acessando alguns recursos';
+
+  String get accessiblePathName => 'Recursos acessíveis';
+
+  /// This is used in video asset item in the picker, in order
+  /// to display the duration of the video or audio type of asset.
+  /// 该字段用在选择器视频或音频部件上，用于显示视频或音频资源的时长。
+  String durationIndicatorBuilder(Duration duration) {
+    const String separator = ':';
+    final String minute = duration.inMinutes.toString().padLeft(2, '0');
+    final String second = (duration - Duration(minutes: duration.inMinutes))
+        .inSeconds
+        .toString()
+        .padLeft(2, '0');
+    return '$minute$separator$second';
+  }
+
+  /// Semantics fields.
+  ///
+  /// Fields below are only for semantics usage. For customizable these fields,
+  /// head over to [EnglishAssetPickerTextDelegate] for fields understanding.
+  String get sTypeAudioLabel => 'Áudio';
+
+  String get sTypeImageLabel => 'imagem';
+
+  String get sTypeVideoLabel => 'vídeo';
+
+  String get sTypeOtherLabel => 'Outros recursos';
+
+  String semanticTypeLabel(AssetType type) {
+    return switch (type) {
+      AssetType.audio => sTypeAudioLabel,
+      AssetType.image => sTypeImageLabel,
+      AssetType.video => sTypeVideoLabel,
+      AssetType.other => sTypeOtherLabel,
+    };
+  }
+
+  String get sActionPlayHint => 'tocar';
+
+  String get sActionPreviewHint => 'Visualização';
+
+  String get sActionSelectHint => 'Selecionado';
+
+  String get sActionSwitchPathLabel => 'Alternar caminho';
+
+  String get sActionUseCameraHint => 'Usar a câmera';
+
+  String get sNameDurationLabel => 'Duração';
+
+  String get sUnitAssetCountLabel => 'quantidade';
+
+  /// Fallback delegate for semantics determined by platform.
+  ///
+  /// The purpose of this field is to provide a fallback delegate references
+  /// when a language does not supported by Talkback or VoiceOver. Set this to
+  /// another text delegate makes screen readers read accordingly.
+  ///
+  /// See also:
+  ///  * Talkback: https://support.google.com/accessibility/android/answer/11101402)
+  ///  * VoiceOver: https://support.apple.com/en-us/HT206175
+  AssetPickerTextDelegate get semanticsTextDelegate => this;
+}
+
+class SpanishAssetPickerTextDelegate extends AssetPickerTextDelegate {
+  const SpanishAssetPickerTextDelegate();
+
+  String get languageCode => 'es';
+
+  @nonVirtual
+  Locale get locale => Locale.fromSubtags(
+        languageCode: languageCode,
+        scriptCode: scriptCode,
+        countryCode: countryCode,
+      );
+
+  /// Confirm string for the confirm button.
+  /// 确认按钮的字段
+  String get confirm => 'confirmar';
+
+  /// Cancel string for back button.
+  /// 返回按钮的字段
+  String get cancel => 'Cancelar';
+
+  /// Edit string for edit button.
+  /// 编辑按钮的字段
+  String get edit => 'editar';
+
+  /// GIF indicator string.
+  /// GIF指示的字段
+  String get gifIndicator => 'GIF';
+
+  /// Live-Photo image indicator string.
+  /// 实况图片指示的字段
+  String get livePhotoIndicator => 'En vivo';
+
+  /// Load failed string for item.
+  /// 资源加载失败时的字段
+  String get loadFailed => 'Falló la carga';
+
+  /// Original string for original selection.
+  /// 选择是否原图的字段
+  String get original => 'imagen original';
+
+  /// Preview string for preview button.
+  /// 预览按钮的字段
+  String get preview => 'Vista previa';
+
+  /// Select string for select button.
+  /// 选择按钮的字段
+  String get select => 'elección';
+
+  /// Empty list string for empty asset list.
+  /// 资源列表为空时的占位字段
+  String get emptyList => 'La lista está vacía';
+
+  /// Un-supported asset type string for assets that
+  /// belongs to [AssetType.other].
+  /// 未支持的资源类型的字段
+  String get unSupportedAssetType =>
+      'Tipos de recursos que aún no se han apoyado';
+
+  /// "Unable to access all assets in album".
+  String get unableToAccessAll => 'No se puede acceder a todos los recursos';
+
+  String get viewingLimitedAssetsTip =>
+      'Las aplicaciones solo pueden acceder a algunos recursos y álbumes';
+
+  String get changeAccessibleLimitedAssets =>
+      'Haga clic para configurar los recursos accesibles';
+
+  String get accessAllTip =>
+      'Has establecido que la aplicación solo puede acceder a algunos recursos del dispositivo,'
+      'Se recomienda permitir el acceso a "todos los recursos"';
+
+  String get goToSystemSettings => 'Ir a la configuración del sistema';
+
+  /// "Continue accessing some assets".
+  String get accessLimitedAssets => 'Continuar visitando algunos recursos';
+
+  String get accessiblePathName => 'Recursos accesibles';
+
+  /// This is used in video asset item in the picker, in order
+  /// to display the duration of the video or audio type of asset.
+  /// 该字段用在选择器视频或音频部件上，用于显示视频或音频资源的时长。
+  String durationIndicatorBuilder(Duration duration) {
+    const String separator = ':';
+    final String minute = duration.inMinutes.toString().padLeft(2, '0');
+    final String second = (duration - Duration(minutes: duration.inMinutes))
+        .inSeconds
+        .toString()
+        .padLeft(2, '0');
+    return '$minute$separator$second';
+  }
+
+  /// Semantics fields.
+  ///
+  /// Fields below are only for semantics usage. For customizable these fields,
+  /// head over to [EnglishAssetPickerTextDelegate] for fields understanding.
+  String get sTypeAudioLabel => 'audio';
+
+  String get sTypeImageLabel => 'imagen';
+
+  String get sTypeVideoLabel => 'vídeo';
+
+  String get sTypeOtherLabel => 'Otros recursos';
+
+  String semanticTypeLabel(AssetType type) {
+    return switch (type) {
+      AssetType.audio => sTypeAudioLabel,
+      AssetType.image => sTypeImageLabel,
+      AssetType.video => sTypeVideoLabel,
+      AssetType.other => sTypeOtherLabel,
+    };
+  }
+
+  String get sActionPlayHint => 'reproducir';
+
+  String get sActionPreviewHint => 'Vista previa';
+
+  String get sActionSelectHint => 'Selección';
+
+  String get sActionSwitchPathLabel => 'Cambiar ruta';
+
+  String get sActionUseCameraHint => 'Usar la Cámara';
+
+  String get sNameDurationLabel => 'duración';
+
+  String get sUnitAssetCountLabel => 'cantidad';
+
+  /// Fallback delegate for semantics determined by platform.
+  ///
+  /// The purpose of this field is to provide a fallback delegate references
+  /// when a language does not supported by Talkback or VoiceOver. Set this to
+  /// another text delegate makes screen readers read accordingly.
+  ///
+  /// See also:
+  ///  * Talkback: https://support.google.com/accessibility/android/answer/11101402)
+  ///  * VoiceOver: https://support.apple.com/en-us/HT206175
+  AssetPickerTextDelegate get semanticsTextDelegate => this;
 }
