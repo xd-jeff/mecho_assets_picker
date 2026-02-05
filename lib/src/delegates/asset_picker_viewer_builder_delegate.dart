@@ -770,10 +770,10 @@ class DefaultAssetPickerViewerBuilderDelegate
             padding: EdgeInsets.only(left: 15, right: 16, top: 6, bottom: 6),
             color: Colors.transparent,
             child: Image.asset(
-              ImageRes.back,
+              ImageRes.backBlack,
               package: 'mecho_assets_picker',
-              width: 12,
-              height: 18,
+              width: 24,
+              height: 24,
             ),
           ),
         ),
@@ -899,7 +899,11 @@ class DefaultAssetPickerViewerBuilderDelegate
               child: Text(
                 confirmButtonTitle ?? buildText(),
                 // style: const TextStyle(fontSize: 17),
-                style: const TextStyle(fontSize: 14, color: Colors.black),
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
           );

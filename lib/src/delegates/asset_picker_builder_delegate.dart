@@ -716,7 +716,7 @@ abstract class AssetPickerBuilderDelegate<Asset, Path> {
             padding: EdgeInsets.only(left: 15, right: 16, top: 6, bottom: 6),
             color: Colors.transparent,
             child: Image.asset(
-              ImageRes.close,
+              ImageRes.closeBlack,
               package: 'mecho_assets_picker',
               width: 14,
               height: 14,
@@ -743,7 +743,7 @@ abstract class AssetPickerBuilderDelegate<Asset, Path> {
           Navigator.maybeOf(context)?.maybePop();
         },
         icon: Image.asset(
-          ImageRes.close,
+          ImageRes.closeBlack,
           package: 'mecho_assets_picker',
           width: 14,
           height: 14,
@@ -1954,7 +1954,11 @@ class DefaultAssetPickerBuilderDelegate
             constraints: const BoxConstraints(minWidth: 100, minHeight: 40),
             child: Text(
               confirmButtonTitle ?? semanticsTextDelegate.confirm,
-              style: const TextStyle(fontSize: 14, color: Colors.black),
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
         );
@@ -2295,11 +2299,17 @@ class DefaultAssetPickerBuilderDelegate
                       child: w,
                     );
                   },
-                  child: const Icon(
-                    Icons.keyboard_arrow_down,
-                    size: 20,
-                    color: Color(0xff6E7082),
+                  child: Image.asset(
+                    ImageRes.arrowDownBlack,
+                    package: 'mecho_assets_picker',
+                    width: 12,
+                    height: 12,
                   ),
+                  // child: const Icon(
+                  //   Icons.keyboard_arrow_down,
+                  //   size: 20,
+                  //   color: Color(0xff6E7082),
+                  // ),
                 ),
               ),
             ),
@@ -2392,12 +2402,12 @@ class DefaultAssetPickerBuilderDelegate
                           Text(name,
                               style: TextStyle(
                                 fontSize: 14,
-                                color: Colors.white,
+                                color: Colors.black,
                               )),
                           if (semanticsCount != null)
                             Text(semanticsCount,
                                 style: TextStyle(
-                                  color: Colors.white.withValues(alpha: 0.6),
+                                  color: Colors.black.withValues(alpha: 0.6),
                                   fontSize: 12,
                                 )),
                         ],
