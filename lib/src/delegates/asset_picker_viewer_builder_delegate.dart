@@ -444,7 +444,7 @@ class DefaultAssetPickerViewerBuilderDelegate
       AssetType.image => ImagePageBuilder(
           asset: asset,
           delegate: this,
-          previewThumbnailSize: _getPreviewThumbnailSize,
+          previewThumbnailSize: _getPreviewThumbnailSize(context, asset),
           shouldAutoplayPreview: shouldAutoplayPreview,
         ),
       AssetType.video => VideoPageBuilder(
