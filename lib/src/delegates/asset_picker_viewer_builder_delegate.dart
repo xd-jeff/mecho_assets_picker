@@ -444,7 +444,7 @@ class DefaultAssetPickerViewerBuilderDelegate
       AssetType.image => ImagePageBuilder(
           asset: asset,
           delegate: this,
-          previewThumbnailSize: previewThumbnailSize,
+          previewThumbnailSize: _getPreviewThumbnailSize,
           shouldAutoplayPreview: shouldAutoplayPreview,
         ),
       AssetType.video => VideoPageBuilder(
@@ -490,6 +490,35 @@ class DefaultAssetPickerViewerBuilderDelegate
         child: builder,
       ),
     );
+  }
+
+  ThumbnailSize? _getPreviewThumbnailSize(
+      BuildContext context, AssetEntity entity) {
+    // 防止分辨率异常过大的图片加载失败
+    int resizedWidth = 0;
+    int resizedHeight = 0;
+
+    final mediaQuery = MediaQuery.of(context);
+    final targetWidth =
+        (mediaQuery.size.width * mediaQuery.devicePixelRatio * 2).toInt();
+    final targetHeight =
+        (mediaQuery.size.height * mediaQuery.devicePixelRatio * 2).toInt();
+
+    if (entity.width > targetWidth || entity.height > targetHeight) {
+      if (targetWidth > targetHeight) {
+        // 按高等比缩放
+        resizedHeight = targetHeight;
+        resizedWidth = (resizedHeight / entity.height * entity.width).toInt();
+      } else {
+        resizedWidth = targetWidth;
+        resizedHeight = (targetWidth / entity.width * entity.height).toInt();
+      }
+    }
+
+    if (resizedWidth > 0 || resizedHeight > 0) {
+      return ThumbnailSize(resizedWidth, resizedHeight);
+    }
+    return previewThumbnailSize;
   }
 
   /// Preview item widgets for audios.
