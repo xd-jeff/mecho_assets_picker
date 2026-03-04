@@ -768,7 +768,11 @@ abstract class AssetPickerBuilderDelegate<Asset, Path> {
           SizedBox(height: size.height / 30),
           ScaleText(
             permissionLimitTip ?? textDelegate.accessAllTip,
-            style: const TextStyle(fontSize: 18, color: Colors.black),
+            style: const TextStyle(
+              fontSize: 18,
+              color: Colors.black,
+              fontWeight: FontWeight.w500,
+            ),
             textAlign: TextAlign.center,
             semanticsLabel: semanticsTextDelegate.accessAllTip,
           ),
@@ -776,34 +780,89 @@ abstract class AssetPickerBuilderDelegate<Asset, Path> {
       ),
     );
 
-    final Widget goToSettingsButton = MaterialButton(
-      elevation: 0,
-      minWidth: 150,
-      height: appBarItemHeight * 1.25,
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      color: Color(0xff08C284),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5),
-      ),
-      onPressed: PhotoManager.openSetting,
-      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      child: ScaleText(
-        authButtonTitle ?? textDelegate.goToSystemSettings,
-        style: const TextStyle(fontSize: 17),
-        semanticsLabel: semanticsTextDelegate.goToSystemSettings,
+    // final Widget goToSettingsButton = MaterialButton(
+    //   elevation: 0,
+    //   minWidth: 150,
+    //   height: appBarItemHeight * 1.25,
+    //   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+    //   color: Color(0xff08C284),
+    //   shape: RoundedRectangleBorder(
+    //     borderRadius: BorderRadius.circular(5),
+    //   ),
+    //   onPressed: PhotoManager.openSetting,
+    //   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+    //   child: ScaleText(
+    //     authButtonTitle ?? textDelegate.goToSystemSettings,
+    //     style: const TextStyle(fontSize: 17),
+    //     semanticsLabel: semanticsTextDelegate.goToSystemSettings,
+    //   ),
+    // );
+
+    final Widget goToSettingsButton = GestureDetector(
+      onTap: PhotoManager.openSetting,
+      child: Container(
+        alignment: Alignment.center,
+        width: double.infinity,
+        height: 48,
+        decoration: BoxDecoration(
+          color: Color(0xffB7E2D4),
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(
+            color: Color(0xff687571),
+            width: 1,
+          ),
+        ),
+        margin: EdgeInsets.symmetric(horizontal: 16),
+        child: ScaleText(
+          authButtonTitle ?? textDelegate.goToSystemSettings,
+          style: const TextStyle(
+            fontSize: 16,
+            color: Colors.black,
+            fontWeight: FontWeight.w500,
+          ),
+          semanticsLabel: semanticsTextDelegate.goToSystemSettings,
+        ),
       ),
     );
 
-    final Widget accessLimitedButton = Semantics(
-      label: semanticsTextDelegate.accessLimitedAssets,
-      button: true,
-      child: GestureDetector(
-        onTap: () {
-          permissionOverlayDisplay.value = false;
-        },
+    // final Widget accessLimitedButton = Semantics(
+    //   label: semanticsTextDelegate.accessLimitedAssets,
+    //   button: true,
+    //   child: GestureDetector(
+    //     onTap: () {
+    //       permissionOverlayDisplay.value = false;
+    //     },
+    //     child: ScaleText(
+    //       textDelegate.accessLimitedAssets,
+    //       style: TextStyle(color: Color(0xff08C284)),
+    //     ),
+    //   ),
+    // );
+
+    final Widget accessLimitedButton = GestureDetector(
+      onTap: () {
+        permissionOverlayDisplay.value = false;
+      },
+      child: Container(
+        alignment: Alignment.center,
+        width: double.infinity,
+        height: 48,
+        decoration: BoxDecoration(
+          color: Color(0xffE5F7F1),
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(
+            color: Color(0xff687571),
+            width: 1,
+          ),
+        ),
+        margin: EdgeInsets.symmetric(horizontal: 16),
         child: ScaleText(
           textDelegate.accessLimitedAssets,
-          style: TextStyle(color: interactiveTextColor(context)),
+          style: const TextStyle(
+            fontSize: 16,
+            color: Colors.black,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ),
     );
@@ -825,14 +884,26 @@ abstract class AssetPickerBuilderDelegate<Asset, Path> {
                 children: <Widget>[
                   closeButton,
                   SizedBox(height: 20),
+                  Row(
+                    children: [
+                      SizedBox(width: 56),
+                      Image.asset(
+                        ImageRes.photoPermissionDenied,
+                        package: 'mecho_assets_picker',
+                        height: 120,
+                      ),
+                      SizedBox(width: 56),
+                    ],
+                  ),
+                  SizedBox(height: 32),
                   limitedTips,
-                  SizedBox(height: 40),
+                  const Spacer(),
                   goToSettingsButton,
-                  // SizedBox(height: size.height / 18),
-                  // accessLimitedButton,
-                  // SizedBox(
-                  //   height: math.max(padding.bottom, 24.0),
-                  // ),
+                  SizedBox(height: 24),
+                  accessLimitedButton,
+                  SizedBox(
+                    height: padding.bottom + 24.0,
+                  ),
                 ],
               ),
             ),
@@ -2709,27 +2780,30 @@ class DefaultAssetPickerBuilderDelegate
         padding: const EdgeInsets.symmetric(horizontal: 10)
             .add(EdgeInsets.only(bottom: bottomPadding)),
         height: permissionLimitedBarHeight + bottomPadding,
-        color: theme.primaryColor.withOpacity(isAppleOS(context) ? 0.90 : 1),
+        // color: theme.primaryColor.withOpacity(isAppleOS(context) ? 0.90 : 1),
+        color: Color(0xFFFEFBD7),
         child: Row(
           children: <Widget>[
             const SizedBox(width: 5),
             Icon(
               Icons.warning,
-              color: Colors.orange[400]!.withOpacity(.8),
+              color: Colors.orange[400]!.withValues(alpha: 0.8),
             ),
-            const SizedBox(width: 15),
+            const SizedBox(width: 12),
             Expanded(
               child: ScaleText(
                 textDelegate.accessAllTip,
                 style: context.textTheme.bodySmall?.copyWith(
-                  fontSize: 14,
+                  fontSize: 12,
+                  color: Colors.black,
                 ),
                 semanticsLabel: semanticsTextDelegate.accessAllTip,
               ),
             ),
             Icon(
               Icons.keyboard_arrow_right,
-              color: context.iconTheme.color?.withOpacity(.5),
+              // color: context.iconTheme.color?.withOpacity(.5),
+              color: Colors.black.withValues(alpha: 0.6),
             ),
           ],
         ),

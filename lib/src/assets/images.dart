@@ -9,5 +9,7 @@ class ImageRes {
 
   static const arrowDownBlack = "$_dir/ic_arrow_down_black.png";
 
+  static const photoPermissionDenied = "$_dir/ic_photo_permission_denied.png";
+
   static const _dir = "assets/images";
 }
