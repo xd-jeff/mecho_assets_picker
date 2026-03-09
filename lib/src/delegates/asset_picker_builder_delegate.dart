@@ -1359,7 +1359,7 @@ class DefaultAssetPickerBuilderDelegate
                         ],
                       ),
                     ),
-                    pathEntityListBackdrop(context),
+                    // pathEntityListBackdrop(context),
                   ],
                 )
               : loadingIndicator(context),
