@@ -2188,41 +2188,42 @@ class DefaultAssetPickerBuilderDelegate
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             // 权限
-            ValueListenableBuilder<PermissionState>(
-              valueListenable: permissionNotifier,
-              builder: (_, PermissionState ps, Widget? child) => Semantics(
-                label: '${semanticsTextDelegate.viewingLimitedAssetsTip}, '
-                    '${semanticsTextDelegate.changeAccessibleLimitedAssets}',
-                button: true,
-                onTap: PhotoManager.presentLimited,
-                hidden: !isPermissionLimited,
-                focusable: isPermissionLimited,
-                excludeSemantics: true,
-                child: isPermissionLimited ? child : const SizedBox.shrink(),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 12,
-                ),
-                child: Text.rich(
-                  TextSpan(
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: textDelegate.viewingLimitedAssetsTip,
-                      ),
-                      TextSpan(
-                        text: ' '
-                            '${textDelegate.changeAccessibleLimitedAssets}',
-                        style: TextStyle(color: interactiveTextColor(context)),
-                        recognizer: presentLimitedTapGestureRecognizer,
-                      ),
-                    ],
-                  ),
-                  style: context.textTheme.bodySmall?.copyWith(fontSize: 14),
-                ),
-              ),
-            ),
+            // ValueListenableBuilder<PermissionState>(
+            //   valueListenable: permissionNotifier,
+            //   builder: (_, PermissionState ps, Widget? child) => Semantics(
+            //     label: '${semanticsTextDelegate.viewingLimitedAssetsTip}, '
+            //         '${semanticsTextDelegate.changeAccessibleLimitedAssets}',
+            //     button: true,
+            //     onTap: PhotoManager.presentLimited,
+            //     hidden: !isPermissionLimited,
+            //     focusable: isPermissionLimited,
+            //     excludeSemantics: true,
+            //     // child: isPermissionLimited ? child : const SizedBox.shrink(),
+            //     child: const SizedBox.shrink(),
+            //   ),
+            //   child: Padding(
+            //     padding: const EdgeInsets.symmetric(
+            //       horizontal: 20,
+            //       vertical: 12,
+            //     ),
+            //     child: Text.rich(
+            //       TextSpan(
+            //         children: <TextSpan>[
+            //           TextSpan(
+            //             text: textDelegate.viewingLimitedAssetsTip,
+            //           ),
+            //           TextSpan(
+            //             text: ' '
+            //                 '${textDelegate.changeAccessibleLimitedAssets}',
+            //             style: TextStyle(color: interactiveTextColor(context)),
+            //             recognizer: presentLimitedTapGestureRecognizer,
+            //           ),
+            //         ],
+            //       ),
+            //       style: context.textTheme.bodySmall?.copyWith(fontSize: 14),
+            //     ),
+            //   ),
+            // ),
             Expanded(
               child: Selector<DefaultAssetPickerProvider,
                   List<PathWrapper<AssetPathEntity>>>(
@@ -2233,7 +2234,7 @@ class DefaultAssetPickerBuilderDelegate
                         (PathWrapper<AssetPathEntity> p) => p.assetCount != 0,
                       )
                       .toList();
-                  final bottom = MediaQuery.of(context).size.height * 0.7 -
+                  final bottom = MediaQuery.sizeOf(context).height * 0.6 -
                       64 * filtered.length;
                   return GestureDetector(
                     onTap: () {
