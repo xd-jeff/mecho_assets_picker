@@ -3,6 +3,7 @@
 // in the LICENSE file.
 
 import 'dart:async';
+import 'dart:io';
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 import 'dart:ui';
@@ -1405,8 +1406,8 @@ class DefaultAssetPickerBuilderDelegate
               children: <Widget>[
                 Positioned.fill(
                   top: 1,
-                  child: assetsGridBuilder(context),
                   bottom: 14,
+                  child: assetsGridBuilder(context),
                 ),
                 Positioned.fill(top: null, child: bottomActionBar(context)),
               ],
@@ -1490,10 +1491,16 @@ class DefaultAssetPickerBuilderDelegate
         final Widget? specialItem;
         // If user chose a special item's position, add 1 count.
         if (specialItemPosition != SpecialItemPosition.none) {
-          specialItem = specialItemBuilder?.call(
-            context,
-            wrapper?.path,
-            totalCount,
+          specialItem = GestureDetector(
+            onTap: () async {
+              await PhotoManager.presentLimited();
+              _refreshLimitedPhotoAssetChange();
+            },
+            child: specialItemBuilder?.call(
+              context,
+              wrapper?.path,
+              totalCount,
+            ),
           );
           if (specialItem != null) {
             totalCount += 1;
@@ -1714,6 +1721,15 @@ class DefaultAssetPickerBuilderDelegate
         );
       },
     );
+  }
+
+  ///  处理Android集成flutter boost原生生命周期监听失效,需手动触发刷新
+  void _refreshLimitedPhotoAssetChange() {
+    if (Platform.isAndroid && isPermissionLimited) {
+      onAssetsChanged(const MethodCall(''), (VoidCallback fn) {
+        fn();
+      });
+    }
   }
 
   /// There are several conditions within this builder:
