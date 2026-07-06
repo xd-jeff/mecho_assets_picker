@@ -1064,6 +1064,20 @@ class DefaultAssetPickerBuilderDelegate
     super.initState(state);
     presentLimitedTapGestureRecognizer = TapGestureRecognizer()
       ..onTap = PhotoManager.presentLimited;
+
+    if (isPermissionLimited) {
+      Future.delayed(const Duration(milliseconds: 270), () {
+        _performInitialScrollToBottom();
+      });
+    }
+  }
+
+  void _performInitialScrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final position = gridScrollController.position;
+      final maxScrollExtent = position.maxScrollExtent;
+      gridScrollController.jumpTo(maxScrollExtent);
+    });
   }
 
   /// Be aware that the method will do nothing when [keepScrollOffset] is true.
@@ -1494,7 +1508,7 @@ class DefaultAssetPickerBuilderDelegate
           specialItem = GestureDetector(
             onTap: () async {
               await PhotoManager.presentLimited();
-              _refreshLimitedPhotoAssetChange();
+              _refreshLimitedPhotoAssetChange(context);
             },
             child: specialItemBuilder?.call(
               context,
@@ -1685,7 +1699,9 @@ class DefaultAssetPickerBuilderDelegate
                 color: const Color(0xffffffff),
                 child: Selector<DefaultAssetPickerProvider, List<AssetEntity>>(
                   selector: (_, DefaultAssetPickerProvider p) =>
-                      p.currentAssets,
+                      isPermissionLimited
+                          ? p.currentAssets.reversed.toList()
+                          : p.currentAssets,
                   builder: (BuildContext context, List<AssetEntity> assets, _) {
                     final SliverGap bottomGap = SliverGap.v(
                       context.bottomPadding + bottomSectionHeight + 10,
@@ -1724,8 +1740,13 @@ class DefaultAssetPickerBuilderDelegate
   }
 
   ///  处理Android集成flutter boost原生生命周期监听失效,需手动触发刷新
-  void _refreshLimitedPhotoAssetChange() {
-    if (Platform.isAndroid && isPermissionLimited) {
+  void _refreshLimitedPhotoAssetChange(BuildContext context) {
+    if (!Platform.isAndroid) return;
+    if (permissionNotifier.value == PermissionState.authorized) {
+      Navigator.maybeOf(context)?.maybePop();
+      return;
+    }
+    if (isPermissionLimited) {
       onAssetsChanged(const MethodCall(''), (VoidCallback fn) {
         fn();
       });
