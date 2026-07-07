@@ -1064,20 +1064,6 @@ class DefaultAssetPickerBuilderDelegate
     super.initState(state);
     presentLimitedTapGestureRecognizer = TapGestureRecognizer()
       ..onTap = PhotoManager.presentLimited;
-
-    if (isPermissionLimited) {
-      Future.delayed(const Duration(milliseconds: 270), () {
-        _performInitialScrollToBottom();
-      });
-    }
-  }
-
-  void _performInitialScrollToBottom() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final position = gridScrollController.position;
-      final maxScrollExtent = position.maxScrollExtent;
-      gridScrollController.jumpTo(maxScrollExtent);
-    });
   }
 
   /// Be aware that the method will do nothing when [keepScrollOffset] is true.
@@ -1699,9 +1685,7 @@ class DefaultAssetPickerBuilderDelegate
                 color: const Color(0xffffffff),
                 child: Selector<DefaultAssetPickerProvider, List<AssetEntity>>(
                   selector: (_, DefaultAssetPickerProvider p) =>
-                      isPermissionLimited
-                          ? p.currentAssets.reversed.toList()
-                          : p.currentAssets,
+                      p.currentAssets,
                   builder: (BuildContext context, List<AssetEntity> assets, _) {
                     final SliverGap bottomGap = SliverGap.v(
                       context.bottomPadding + bottomSectionHeight + 10,
