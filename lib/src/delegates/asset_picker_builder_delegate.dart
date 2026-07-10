@@ -2320,7 +2320,7 @@ class DefaultAssetPickerBuilderDelegate
             color: Colors.black,
           ),
           maxLines: 1,
-          overflow: TextOverflow.fade,
+          overflow: TextOverflow.ellipsis,
           maxScaleFactor: 1.2,
           semanticsLabel: semanticsText,
         ),
@@ -2342,7 +2342,7 @@ class DefaultAssetPickerBuilderDelegate
         child: Container(
           height: appBarItemHeight,
           constraints: BoxConstraints(
-            maxWidth: MediaQuery.sizeOf(context).width * 0.5,
+            maxWidth: MediaQuery.sizeOf(context).width * 0.45,
           ),
           padding: const EdgeInsetsDirectional.only(start: 12, end: 6),
           // decoration: BoxDecoration(
