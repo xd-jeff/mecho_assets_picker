@@ -2270,6 +2270,7 @@ class DefaultAssetPickerBuilderDelegate
                       isSwitchingPath.value = false;
                     },
                     child: Container(
+                      alignment: Alignment.topCenter,
                       color: Colors.transparent,
                       padding: EdgeInsets.only(
                         left: 92,
@@ -2502,6 +2503,8 @@ class DefaultAssetPickerBuilderDelegate
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(name,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.black,
