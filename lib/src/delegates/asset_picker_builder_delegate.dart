@@ -2162,20 +2162,28 @@ class DefaultAssetPickerBuilderDelegate
       child: ValueListenableBuilder<bool>(
         valueListenable: isSwitchingPath,
         builder: (_, bool isSwitchingPath, Widget? child) {
-          return Visibility(
-              visible: isSwitchingPath,
-              child: ClipRRect(
-                borderRadius: const BorderRadius.vertical(
-                  bottom: Radius.circular(10),
-                ),
-                child: Container(
-                  constraints: BoxConstraints(
-                    maxHeight: MediaQuery.sizeOf(context).height * .6,
-                  ),
-                  // color: theme.colorScheme.surface,
-                  child: child,
-                ),
-              ));
+          return Selector<DefaultAssetPickerProvider,
+                  List<PathWrapper<AssetPathEntity>>>(
+              selector: (_, DefaultAssetPickerProvider p) => p.paths,
+              builder: (_, List<PathWrapper<AssetPathEntity>> paths, __) {
+                return Visibility(
+                    visible: isSwitchingPath,
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.vertical(
+                        bottom: Radius.circular(10),
+                      ),
+                      child: Container(
+                        constraints: BoxConstraints(
+                          maxHeight: math.min(
+                              math.min(
+                                  MediaQuery.sizeOf(context).height * .6, 600),
+                              paths.length * 64),
+                        ),
+                        // color: theme.colorScheme.surface,
+                        child: child,
+                      ),
+                    ));
+              });
 
           return Semantics(
             hidden: isSwitchingPath ? null : true,
@@ -2306,6 +2314,7 @@ class DefaultAssetPickerBuilderDelegate
 
   @override
   Widget pathEntitySelector(BuildContext context) {
+    final scale = Platform.isAndroid ? 0.38 : 0.45;
     Widget pathText(
       BuildContext context,
       String text,
@@ -2342,7 +2351,7 @@ class DefaultAssetPickerBuilderDelegate
         child: Container(
           height: appBarItemHeight,
           constraints: BoxConstraints(
-            maxWidth: MediaQuery.sizeOf(context).width * 0.45,
+            maxWidth: MediaQuery.sizeOf(context).width * scale,
           ),
           padding: const EdgeInsetsDirectional.only(start: 12, end: 6),
           // decoration: BoxDecoration(
